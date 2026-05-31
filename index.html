@@ -350,15 +350,15 @@ async function enviar(){
   fd.append('Tempo de empresa',radio('tempo'));
   fd.append('Faturamento',radio('fat'));
   fd.append('Recebimento',radio('rec'));
-  fd.append('Inadimplência',radio('inad'));
+  fd.append('Inadimplencia',radio('inad'));
   fd.append('Ficou no vermelho',radio('verm'));
-  fd.append('Separação PJ/PF',radio('sep'));
+  fd.append('Separacao PJ/PF',radio('sep'));
   fd.append('Controle financeiro',radio('ctrl'));
   fd.append('Lucro real',radio('luc'));
   fd.append('Desafio',document.getElementById('desafio').value||'—');
   fd.append('Email do prospect',document.getElementById('email').value);
   fd.append('WhatsApp',document.getElementById('whats').value||'—');
-  fd.append('Horário',radio('hor'));
+  fd.append('Horario',radio('hor'));
 
   try{
     var r=await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});
