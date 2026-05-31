@@ -196,10 +196,6 @@
 </head>
 <body>
 
-<!-- BANNER DE CONFIGURAÇÃO -->
-<div id="setupBanner">
-  <div class="setup-inner">
-    <div class="setup-titulo">⚙️ Configuração rápida — faça isso uma única vez</div>
     <div class="setup-desc">Digite seu e-mail abaixo. Cada vez que alguém preencher o formulário, você receberá os dados nesse e-mail automaticamente.</div>
     <div class="setup-row">
       <input type="email" id="inputEmailConfig" placeholder="seu@email.com.br" />
@@ -238,7 +234,10 @@
 </div>
 
 <main>
-  <form id="formulario">
+  <form id="formulario" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="84440271-8b59-492f-83c7-61284bf83546"/>
+    <input type="hidden" name="subject" value="Novo diagnóstico financeiro recebido"/>
+    <input type="hidden" name="redirect" value="false"/>
 
     <!-- SEÇÃO 1 -->
     <div class="form-section active" id="secao0">
@@ -419,33 +418,6 @@
 </main>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────
-  const STORAGE_KEY = 'bpo_email_destino';
-  let emailDestino = localStorage.getItem(STORAGE_KEY) || '';
-
-  window.addEventListener('DOMContentLoaded', () => {
-    if (emailDestino) {
-      document.getElementById('inputEmailConfig').value = emailDestino;
-      mostrarOk();
-    }
-  });
-
-  function salvarEmail() {
-    const val = document.getElementById('inputEmailConfig').value.trim();
-    if (!val || !val.includes('@')) {
-      document.getElementById('inputEmailConfig').style.borderColor = '#E09000';
-      document.getElementById('inputEmailConfig').placeholder = 'Digite um e-mail válido!';
-      return;
-    }
-    emailDestino = val;
-    localStorage.setItem(STORAGE_KEY, val);
-    mostrarOk();
-  }
-
-  function mostrarOk() {
-    document.getElementById('setupOk').style.display = 'flex';
-  }
-
   // ── NAVEGAÇÃO ────────────────────────────────────────
   function atualizarProgress(idx) {
     for (let i = 0; i < 4; i++) {
