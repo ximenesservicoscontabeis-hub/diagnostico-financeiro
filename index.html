@@ -5,127 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Diagnóstico Financeiro Gratuito</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --verde: #0F6E56; --verde-escuro: #085041; --verde-claro: #E1F5EE;
-    --verde-medio: #1D9E75; --creme: #F8F6F1; --creme-escuro: #EDE9E1;
-    --texto: #1A1A18; --texto-suave: #5F5E5A; --borda: #D3D1C7;
-    --branco: #FFFFFF; --erro: #C0392B;
-  }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--creme); color: var(--texto); min-height: 100vh; }
-
-  /* HEADER */
-  header { background: var(--verde-escuro); padding: 0; position: relative; overflow: hidden; }
-  .header-pattern {
-    position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px),
-      repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px);
-  }
-  .header-inner { position: relative; max-width: 720px; margin: 0 auto; padding: 56px 32px 52px; }
-  .badge {
-    display: inline-block; background: rgba(29,158,117,0.25); color: #9FE1CB;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 5px 14px; border-radius: 100px; border: 1px solid rgba(159,225,203,0.3); margin-bottom: 20px;
-  }
-  header h1 { font-family: 'DM Serif Display', serif; font-size: clamp(32px, 5vw, 48px); color: var(--branco); line-height: 1.15; margin-bottom: 16px; font-weight: 400; }
-  header h1 em { font-style: italic; color: #9FE1CB; }
-  header p { color: rgba(255,255,255,0.65); font-size: 16px; line-height: 1.65; max-width: 520px; font-weight: 300; }
-  .header-meta { display: flex; gap: 24px; margin-top: 32px; flex-wrap: wrap; }
-  .meta-item { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 13px; }
-  .meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--verde-medio); }
-
-  /* PROGRESS */
-  .progress-bar-wrap { background: var(--verde-escuro); padding: 0 32px 24px; }
-  .progress-bar-inner { max-width: 720px; margin: 0 auto; }
-  .progress-steps { display: flex; gap: 6px; }
-  .step-dot { height: 3px; flex: 1; border-radius: 2px; background: rgba(255,255,255,0.15); transition: background 0.4s ease; }
-  .step-dot.active { background: var(--verde-medio); }
-  .step-dot.done { background: rgba(29,158,117,0.5); }
-
-  /* MAIN */
-  main { max-width: 720px; margin: 0 auto; padding: 48px 32px 80px; }
-  .form-section { display: none; animation: fadeUp 0.4s ease forwards; }
-  .form-section.active { display: block; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--verde-medio); margin-bottom: 6px; }
-  .section-title { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--texto); margin-bottom: 8px; font-weight: 400; }
-  .section-desc { color: var(--texto-suave); font-size: 15px; line-height: 1.6; margin-bottom: 36px; font-weight: 300; }
-
-  /* FIELDS */
-  .field { margin-bottom: 24px; }
-  label { display: block; font-size: 14px; font-weight: 500; color: var(--texto); margin-bottom: 8px; }
-  label .obrigatorio { color: var(--verde-medio); margin-left: 2px; }
-  label .opcional { color: var(--texto-suave); font-weight: 300; font-size: 12px; margin-left: 4px; }
-  input[type="text"], input[type="email"], input[type="tel"], textarea, select {
-    width: 100%; padding: 13px 16px; border: 1.5px solid var(--borda); border-radius: 10px;
-    font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--texto); background: var(--branco);
-    transition: border-color 0.2s, box-shadow 0.2s; appearance: none; -webkit-appearance: none; outline: none;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--verde-medio); box-shadow: 0 0 0 4px rgba(29,158,117,0.1); }
-  input.erro, select.erro { border-color: var(--erro); }
-  .erro-msg { font-size: 12px; color: var(--erro); margin-top: 5px; display: none; }
-  .erro-msg.visivel { display: block; }
-  textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235F5E5A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px;
-  }
-  .opcoes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .opcoes-grid.tres { grid-template-columns: 1fr 1fr 1fr; }
-  .opcao { position: relative; }
-  .opcao input { display: none; }
-  .opcao label {
-    display: flex; align-items: center; gap: 10px; padding: 12px 16px;
-    border: 1.5px solid var(--borda); border-radius: 10px; cursor: pointer;
-    font-size: 14px; font-weight: 400; color: var(--texto-suave); background: var(--branco);
-    transition: all 0.18s ease; margin: 0; line-height: 1.4;
-  }
-  .opcao input:checked + label { border-color: var(--verde-medio); background: var(--verde-claro); color: var(--verde-escuro); font-weight: 500; }
-  .opcao label:hover { border-color: var(--verde-medio); background: rgba(29,158,117,0.04); color: var(--texto); }
-  .opcao-radio {
-    width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--borda);
-    background: var(--branco); flex-shrink: 0; transition: all 0.18s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .opcao input:checked + label .opcao-radio { border-color: var(--verde-medio); background: var(--verde-medio); box-shadow: inset 0 0 0 3px var(--branco); }
-  .divider { height: 1px; background: var(--creme-escuro); margin: 32px 0; }
-  .btn-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; gap: 12px; }
-  .btn-voltar {
-    background: none; border: 1.5px solid var(--borda); color: var(--texto-suave);
-    padding: 13px 24px; border-radius: 10px; font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s;
-  }
-  .btn-voltar:hover { border-color: var(--texto-suave); color: var(--texto); }
-  .btn-proximo, .btn-enviar {
-    background: var(--verde); color: var(--branco); border: none; padding: 14px 32px;
-    border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-  }
-  .btn-proximo:hover, .btn-enviar:hover { background: var(--verde-escuro); transform: translateY(-1px); }
-  .btn-enviar { background: var(--verde-medio); }
-  .btn-enviar:hover { background: var(--verde); }
-
-  /* SUCESSO */
-  #sucesso { display: none; text-align: center; padding: 60px 20px; animation: fadeUp 0.5s ease forwards; }
-  .check-circle { width: 72px; height: 72px; border-radius: 50%; background: var(--verde-claro); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
-  #sucesso h2 { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--texto); margin-bottom: 12px; font-weight: 400; }
-  #sucesso p { color: var(--texto-suave); font-size: 16px; line-height: 1.65; max-width: 440px; margin: 0 auto 32px; }
-  .prazo-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--verde-claro); color: var(--verde-escuro); border: 1px solid rgba(15,110,86,0.2); padding: 10px 20px; border-radius: 100px; font-size: 14px; font-weight: 500; }
-
-  @media (max-width: 600px) {
-    main { padding: 32px 20px 60px; }
-    .header-inner { padding: 40px 20px 36px; }
-    .progress-bar-wrap { padding: 0 20px 20px; }
-    #setupBanner { padding: 16px 20px; }
-    .opcoes-grid, .opcoes-grid.tres { grid-template-columns: 1fr; }
-    .btn-row { flex-direction: column-reverse; }
-    .btn-voltar, .btn-proximo, .btn-enviar { width: 100%; justify-content: center; }
-  }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--verde:#0F6E56;--verde-escuro:#085041;--verde-claro:#E1F5EE;--verde-medio:#1D9E75;--creme:#F8F6F1;--creme-escuro:#EDE9E1;--texto:#1A1A18;--texto-suave:#5F5E5A;--borda:#D3D1C7;--branco:#FFFFFF;--erro:#C0392B}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--creme);color:var(--texto);min-height:100vh}
+header{background:var(--verde-escuro);position:relative;overflow:hidden}
+.header-pattern{position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,.02) 40px,rgba(255,255,255,.02) 41px),repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,.02) 40px,rgba(255,255,255,.02) 41px)}
+.header-inner{position:relative;max-width:720px;margin:0 auto;padding:56px 32px 52px}
+.badge{display:inline-block;background:rgba(29,158,117,.25);color:#9FE1CB;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:100px;border:1px solid rgba(159,225,203,.3);margin-bottom:20px}
+header h1{font-family:'DM Serif Display',serif;font-size:clamp(32px,5vw,48px);color:#fff;line-height:1.15;margin-bottom:16px;font-weight:400}
+header h1 em{font-style:italic;color:#9FE1CB}
+header p{color:rgba(255,255,255,.65);font-size:16px;line-height:1.65;max-width:520px;font-weight:300}
+.header-meta{display:flex;gap:24px;margin-top:32px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.5);font-size:13px}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--verde-medio)}
+.progress-bar-wrap{background:var(--verde-escuro);padding:0 32px 24px}
+.progress-bar-inner{max-width:720px;margin:0 auto}
+.progress-steps{display:flex;gap:6px}
+.step-dot{height:3px;flex:1;border-radius:2px;background:rgba(255,255,255,.15);transition:background .4s}
+.step-dot.active{background:var(--verde-medio)}
+.step-dot.done{background:rgba(29,158,117,.5)}
+main{max-width:720px;margin:0 auto;padding:48px 32px 80px}
+.form-section{display:none;animation:fadeUp .4s ease forwards}
+.form-section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--verde-medio);margin-bottom:6px}
+.section-title{font-family:'DM Serif Display',serif;font-size:28px;color:var(--texto);margin-bottom:8px;font-weight:400}
+.section-desc{color:var(--texto-suave);font-size:15px;line-height:1.6;margin-bottom:36px;font-weight:300}
+.field{margin-bottom:24px}
+label{display:block;font-size:14px;font-weight:500;color:var(--texto);margin-bottom:8px}
+label .ob{color:var(--verde-medio);margin-left:2px}
+label .op{color:var(--texto-suave);font-weight:300;font-size:12px;margin-left:4px}
+input[type=text],input[type=email],input[type=tel],textarea,select{width:100%;padding:13px 16px;border:1.5px solid var(--borda);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--texto);background:var(--branco);transition:border-color .2s,box-shadow .2s;appearance:none;-webkit-appearance:none;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--verde-medio);box-shadow:0 0 0 4px rgba(29,158,117,.1)}
+textarea{min-height:100px;resize:vertical;line-height:1.6}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235F5E5A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.opcao input{display:none}
+.opcao label{display:flex;align-items:center;gap:10px;padding:12px 16px;border:1.5px solid var(--borda);border-radius:10px;cursor:pointer;font-size:14px;font-weight:400;color:var(--texto-suave);background:var(--branco);transition:all .18s;margin:0;line-height:1.4}
+.opcao input:checked+label{border-color:var(--verde-medio);background:var(--verde-claro);color:var(--verde-escuro);font-weight:500}
+.opcao label:hover{border-color:var(--verde-medio);background:rgba(29,158,117,.04);color:var(--texto)}
+.radio-circle{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--borda);background:var(--branco);flex-shrink:0;transition:all .18s;display:flex;align-items:center;justify-content:center}
+.opcao input:checked+label .radio-circle{border-color:var(--verde-medio);background:var(--verde-medio);box-shadow:inset 0 0 0 3px var(--branco)}
+.divider{height:1px;background:var(--creme-escuro);margin:32px 0}
+.btn-row{display:flex;justify-content:space-between;align-items:center;margin-top:40px;gap:12px}
+.btn-voltar{background:none;border:1.5px solid var(--borda);color:var(--texto-suave);padding:13px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-voltar:hover{border-color:var(--texto-suave);color:var(--texto)}
+.btn-prox,.btn-env{background:var(--verde);color:var(--branco);border:none;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.btn-prox:hover,.btn-env:hover{background:var(--verde-escuro);transform:translateY(-1px)}
+.btn-env{background:var(--verde-medio)}
+.btn-env:hover{background:var(--verde)}
+.btn-env:disabled{opacity:.6;cursor:not-allowed;transform:none}
+#sucesso{display:none;text-align:center;padding:60px 20px;animation:fadeUp .5s ease forwards}
+.check-circle{width:72px;height:72px;border-radius:50%;background:var(--verde-claro);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+#sucesso h2{font-family:'DM Serif Display',serif;font-size:32px;color:var(--texto);margin-bottom:12px;font-weight:400}
+#sucesso p{color:var(--texto-suave);font-size:16px;line-height:1.65;max-width:440px;margin:0 auto 32px}
+.prazo-badge{display:inline-flex;align-items:center;gap:8px;background:var(--verde-claro);color:var(--verde-escuro);border:1px solid rgba(15,110,86,.2);padding:10px 20px;border-radius:100px;font-size:14px;font-weight:500}
+.erro-msg{font-size:12px;color:var(--erro);margin-top:5px;display:none}
+.erro-msg.show{display:block}
+@media(max-width:600px){main{padding:32px 20px 60px}.header-inner{padding:40px 20px 36px}.progress-bar-wrap{padding:0 20px 20px}.grid,.grid3{grid-template-columns:1fr}.btn-row{flex-direction:column-reverse}.btn-voltar,.btn-prox,.btn-env{width:100%;justify-content:center}}
 </style>
 </head>
 <body>
@@ -147,180 +88,181 @@
 <div class="progress-bar-wrap">
   <div class="progress-bar-inner">
     <div class="progress-steps">
-      <div class="step-dot active" id="dot0"></div>
-      <div class="step-dot" id="dot1"></div>
-      <div class="step-dot" id="dot2"></div>
-      <div class="step-dot" id="dot3"></div>
+      <div class="step-dot active" id="d0"></div>
+      <div class="step-dot" id="d1"></div>
+      <div class="step-dot" id="d2"></div>
+      <div class="step-dot" id="d3"></div>
     </div>
   </div>
 </div>
 
 <main>
-  <form id="formulario">
+  <div id="formulario">
 
     <!-- SEÇÃO 1 -->
-    <div class="form-section active" id="secao0">
+    <div class="form-section active" id="s0">
       <div class="section-label">Etapa 1 de 4</div>
       <div class="section-title">Sobre sua empresa</div>
       <div class="section-desc">Vamos começar com o básico para personalizar sua análise.</div>
       <div class="field">
-        <label>Nome da empresa <span class="obrigatorio">*</span></label>
-        <input type="text" id="empresa" placeholder="Ex: Mercado Silva Ltda." />
-        <div class="erro-msg">Informe o nome da empresa.</div>
+        <label>Nome da empresa <span class="ob">*</span></label>
+        <input type="text" id="empresa" placeholder="Ex: Mercado Silva Ltda."/>
+        <div class="erro-msg" id="e-empresa">Informe o nome da empresa.</div>
       </div>
       <div class="field">
-        <label>Seu nome <span class="obrigatorio">*</span></label>
-        <input type="text" id="nome" placeholder="Seu nome completo" />
-        <div class="erro-msg">Informe seu nome.</div>
+        <label>Seu nome <span class="ob">*</span></label>
+        <input type="text" id="nome" placeholder="Seu nome completo"/>
+        <div class="erro-msg" id="e-nome">Informe seu nome.</div>
       </div>
       <div class="field">
-        <label>Setor de atuação <span class="obrigatorio">*</span></label>
+        <label>Setor de atuação <span class="ob">*</span></label>
         <select id="setor">
-          <option value="" disabled selected>Selecione o setor</option>
+          <option value="">Selecione o setor</option>
           <option>Comércio varejista</option><option>Comércio atacadista</option>
           <option>Prestação de serviços</option><option>Alimentação / Restaurante</option>
           <option>Saúde / Clínica</option><option>Construção civil</option>
           <option>Educação</option><option>Tecnologia</option><option>Outro</option>
         </select>
-        <div class="erro-msg">Selecione o setor.</div>
+        <div class="erro-msg" id="e-setor">Selecione o setor.</div>
       </div>
       <div class="field">
-        <label>Há quanto tempo a empresa existe? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid">
-          <div class="opcao"><input type="radio" name="tempo" id="t1" value="Menos de 1 ano"/><label for="t1"><span class="opcao-radio"></span>Menos de 1 ano</label></div>
-          <div class="opcao"><input type="radio" name="tempo" id="t2" value="1 a 3 anos"/><label for="t2"><span class="opcao-radio"></span>1 a 3 anos</label></div>
-          <div class="opcao"><input type="radio" name="tempo" id="t3" value="3 a 7 anos"/><label for="t3"><span class="opcao-radio"></span>3 a 7 anos</label></div>
-          <div class="opcao"><input type="radio" name="tempo" id="t4" value="Mais de 7 anos"/><label for="t4"><span class="opcao-radio"></span>Mais de 7 anos</label></div>
+        <label>Há quanto tempo a empresa existe? <span class="ob">*</span></label>
+        <div class="grid">
+          <div class="opcao"><input type="radio" name="tempo" id="t1" value="Menos de 1 ano"/><label for="t1"><span class="radio-circle"></span>Menos de 1 ano</label></div>
+          <div class="opcao"><input type="radio" name="tempo" id="t2" value="1 a 3 anos"/><label for="t2"><span class="radio-circle"></span>1 a 3 anos</label></div>
+          <div class="opcao"><input type="radio" name="tempo" id="t3" value="3 a 7 anos"/><label for="t3"><span class="radio-circle"></span>3 a 7 anos</label></div>
+          <div class="opcao"><input type="radio" name="tempo" id="t4" value="Mais de 7 anos"/><label for="t4"><span class="radio-circle"></span>Mais de 7 anos</label></div>
         </div>
-        <div class="erro-msg" id="erroTempo">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-tempo">Selecione uma opção.</div>
       </div>
-      <div class="btn-row"><div></div><button type="button" class="btn-proximo" onclick="avancar(0)">Próximo →</button></div>
+      <div class="btn-row"><div></div><button class="btn-prox" onclick="ir(0,1)">Próximo →</button></div>
     </div>
 
     <!-- SEÇÃO 2 -->
-    <div class="form-section" id="secao1">
+    <div class="form-section" id="s1">
       <div class="section-label">Etapa 2 de 4</div>
       <div class="section-title">Situação financeira</div>
       <div class="section-desc">Sem julgamentos — quanto mais honesto, mais útil será sua análise.</div>
       <div class="field">
-        <label>Faturamento mensal médio <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid">
-          <div class="opcao"><input type="radio" name="fat" id="f1" value="Até R$20.000"/><label for="f1"><span class="opcao-radio"></span>Até R$ 20.000</label></div>
-          <div class="opcao"><input type="radio" name="fat" id="f2" value="R$20k a R$50k"/><label for="f2"><span class="opcao-radio"></span>R$ 20k a R$ 50k</label></div>
-          <div class="opcao"><input type="radio" name="fat" id="f3" value="R$50k a R$150k"/><label for="f3"><span class="opcao-radio"></span>R$ 50k a R$ 150k</label></div>
-          <div class="opcao"><input type="radio" name="fat" id="f4" value="Acima de R$150k"/><label for="f4"><span class="opcao-radio"></span>Acima de R$ 150k</label></div>
+        <label>Faturamento mensal médio <span class="ob">*</span></label>
+        <div class="grid">
+          <div class="opcao"><input type="radio" name="fat" id="f1" value="Até R$20.000"/><label for="f1"><span class="radio-circle"></span>Até R$ 20.000</label></div>
+          <div class="opcao"><input type="radio" name="fat" id="f2" value="R$20k a R$50k"/><label for="f2"><span class="radio-circle"></span>R$ 20k a R$ 50k</label></div>
+          <div class="opcao"><input type="radio" name="fat" id="f3" value="R$50k a R$150k"/><label for="f3"><span class="radio-circle"></span>R$ 50k a R$ 150k</label></div>
+          <div class="opcao"><input type="radio" name="fat" id="f4" value="Acima de R$150k"/><label for="f4"><span class="radio-circle"></span>Acima de R$ 150k</label></div>
         </div>
-        <div class="erro-msg" id="erroFat">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-fat">Selecione uma opção.</div>
       </div>
       <div class="divider"></div>
       <div class="field">
-        <label>Como você recebe dos clientes? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid tres">
-          <div class="opcao"><input type="radio" name="rec" id="r1" value="Principalmente à vista"/><label for="r1"><span class="opcao-radio"></span>Principalmente à vista</label></div>
-          <div class="opcao"><input type="radio" name="rec" id="r2" value="Principalmente a prazo"/><label for="r2"><span class="opcao-radio"></span>Principalmente a prazo</label></div>
-          <div class="opcao"><input type="radio" name="rec" id="r3" value="Misto"/><label for="r3"><span class="opcao-radio"></span>Misto</label></div>
+        <label>Como você recebe dos clientes? <span class="ob">*</span></label>
+        <div class="grid3">
+          <div class="opcao"><input type="radio" name="rec" id="r1" value="Principalmente à vista"/><label for="r1"><span class="radio-circle"></span>Principalmente à vista</label></div>
+          <div class="opcao"><input type="radio" name="rec" id="r2" value="Principalmente a prazo"/><label for="r2"><span class="radio-circle"></span>Principalmente a prazo</label></div>
+          <div class="opcao"><input type="radio" name="rec" id="r3" value="Misto"/><label for="r3"><span class="radio-circle"></span>Misto</label></div>
         </div>
-        <div class="erro-msg" id="erroRec">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-rec">Selecione uma opção.</div>
       </div>
       <div class="field">
-        <label>Você tem inadimplência? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid tres">
-          <div class="opcao"><input type="radio" name="inad" id="i1" value="Não ou raramente"/><label for="i1"><span class="opcao-radio"></span>Não / raramente</label></div>
-          <div class="opcao"><input type="radio" name="inad" id="i2" value="Sim, moderada"/><label for="i2"><span class="opcao-radio"></span>Sim, moderada</label></div>
-          <div class="opcao"><input type="radio" name="inad" id="i3" value="Sim, é um problema"/><label for="i3"><span class="opcao-radio"></span>Sim, é problema</label></div>
+        <label>Você tem inadimplência? <span class="ob">*</span></label>
+        <div class="grid3">
+          <div class="opcao"><input type="radio" name="inad" id="i1" value="Não ou raramente"/><label for="i1"><span class="radio-circle"></span>Não / raramente</label></div>
+          <div class="opcao"><input type="radio" name="inad" id="i2" value="Sim, moderada"/><label for="i2"><span class="radio-circle"></span>Sim, moderada</label></div>
+          <div class="opcao"><input type="radio" name="inad" id="i3" value="Sim, é um problema"/><label for="i3"><span class="radio-circle"></span>Sim, é problema</label></div>
         </div>
-        <div class="erro-msg" id="erroInad">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-inad">Selecione uma opção.</div>
       </div>
       <div class="field">
-        <label>Já ficou no vermelho por falta de controle financeiro? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid tres">
-          <div class="opcao"><input type="radio" name="verm" id="v1" value="Nunca"/><label for="v1"><span class="opcao-radio"></span>Nunca</label></div>
-          <div class="opcao"><input type="radio" name="verm" id="v2" value="Já aconteceu"/><label for="v2"><span class="opcao-radio"></span>Já aconteceu</label></div>
-          <div class="opcao"><input type="radio" name="verm" id="v3" value="Com frequência"/><label for="v3"><span class="opcao-radio"></span>Com frequência</label></div>
+        <label>Já ficou no vermelho por falta de controle? <span class="ob">*</span></label>
+        <div class="grid3">
+          <div class="opcao"><input type="radio" name="verm" id="v1" value="Nunca"/><label for="v1"><span class="radio-circle"></span>Nunca</label></div>
+          <div class="opcao"><input type="radio" name="verm" id="v2" value="Já aconteceu"/><label for="v2"><span class="radio-circle"></span>Já aconteceu</label></div>
+          <div class="opcao"><input type="radio" name="verm" id="v3" value="Com frequência"/><label for="v3"><span class="radio-circle"></span>Com frequência</label></div>
         </div>
-        <div class="erro-msg" id="erroVerm">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-verm">Selecione uma opção.</div>
       </div>
       <div class="btn-row">
-        <button type="button" class="btn-voltar" onclick="voltar(1)">← Voltar</button>
-        <button type="button" class="btn-proximo" onclick="avancar(1)">Próximo →</button>
+        <button class="btn-voltar" onclick="ir(1,0)">← Voltar</button>
+        <button class="btn-prox" onclick="ir(1,2)">Próximo →</button>
       </div>
     </div>
 
     <!-- SEÇÃO 3 -->
-    <div class="form-section" id="secao2">
+    <div class="form-section" id="s2">
       <div class="section-label">Etapa 3 de 4</div>
       <div class="section-title">Organização financeira</div>
-      <div class="section-desc">Entender como você organiza hoje nos ajuda a identificar as maiores oportunidades.</div>
+      <div class="section-desc">Entender como você organiza hoje nos ajuda a identificar oportunidades.</div>
       <div class="field">
-        <label>Você separa finanças da empresa das pessoais? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid tres">
-          <div class="opcao"><input type="radio" name="sep" id="s1" value="Sim, completamente"/><label for="s1"><span class="opcao-radio"></span>Sim, completamente</label></div>
-          <div class="opcao"><input type="radio" name="sep" id="s2" value="Parcialmente"/><label for="s2"><span class="opcao-radio"></span>Parcialmente</label></div>
-          <div class="opcao"><input type="radio" name="sep" id="s3" value="Não separo"/><label for="s3"><span class="opcao-radio"></span>Não separo</label></div>
+        <label>Você separa finanças da empresa das pessoais? <span class="ob">*</span></label>
+        <div class="grid3">
+          <div class="opcao"><input type="radio" name="sep" id="s1r" value="Sim, completamente"/><label for="s1r"><span class="radio-circle"></span>Sim, completamente</label></div>
+          <div class="opcao"><input type="radio" name="sep" id="s2r" value="Parcialmente"/><label for="s2r"><span class="radio-circle"></span>Parcialmente</label></div>
+          <div class="opcao"><input type="radio" name="sep" id="s3r" value="Não separo"/><label for="s3r"><span class="radio-circle"></span>Não separo</label></div>
         </div>
-        <div class="erro-msg" id="erroSep">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-sep">Selecione uma opção.</div>
       </div>
       <div class="field">
-        <label>Como você controla o financeiro hoje? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid">
-          <div class="opcao"><input type="radio" name="ctrl" id="c1" value="Sistema/software"/><label for="c1"><span class="opcao-radio"></span>Sistema / software</label></div>
-          <div class="opcao"><input type="radio" name="ctrl" id="c2" value="Planilha Excel/Sheets"/><label for="c2"><span class="opcao-radio"></span>Planilha Excel/Sheets</label></div>
-          <div class="opcao"><input type="radio" name="ctrl" id="c3" value="Caderno ou anotações"/><label for="c3"><span class="opcao-radio"></span>Caderno / anotações</label></div>
-          <div class="opcao"><input type="radio" name="ctrl" id="c4" value="Sem controle definido"/><label for="c4"><span class="opcao-radio"></span>Sem controle definido</label></div>
+        <label>Como você controla o financeiro hoje? <span class="ob">*</span></label>
+        <div class="grid">
+          <div class="opcao"><input type="radio" name="ctrl" id="c1" value="Sistema/software"/><label for="c1"><span class="radio-circle"></span>Sistema / software</label></div>
+          <div class="opcao"><input type="radio" name="ctrl" id="c2" value="Planilha Excel/Sheets"/><label for="c2"><span class="radio-circle"></span>Planilha Excel/Sheets</label></div>
+          <div class="opcao"><input type="radio" name="ctrl" id="c3" value="Caderno ou anotações"/><label for="c3"><span class="radio-circle"></span>Caderno / anotações</label></div>
+          <div class="opcao"><input type="radio" name="ctrl" id="c4" value="Sem controle definido"/><label for="c4"><span class="radio-circle"></span>Sem controle definido</label></div>
         </div>
-        <div class="erro-msg" id="erroCtrl">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-ctrl">Selecione uma opção.</div>
       </div>
       <div class="field">
-        <label>Você sabe qual é seu lucro real todo mês? <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid tres">
-          <div class="opcao"><input type="radio" name="luc" id="l1" value="Sim, com precisão"/><label for="l1"><span class="opcao-radio"></span>Sim, com precisão</label></div>
-          <div class="opcao"><input type="radio" name="luc" id="l2" value="Aproximadamente"/><label for="l2"><span class="opcao-radio"></span>Aproximadamente</label></div>
-          <div class="opcao"><input type="radio" name="luc" id="l3" value="Não sei ao certo"/><label for="l3"><span class="opcao-radio"></span>Não sei ao certo</label></div>
+        <label>Você sabe qual é seu lucro real todo mês? <span class="ob">*</span></label>
+        <div class="grid3">
+          <div class="opcao"><input type="radio" name="luc" id="l1" value="Sim, com precisão"/><label for="l1"><span class="radio-circle"></span>Sim, com precisão</label></div>
+          <div class="opcao"><input type="radio" name="luc" id="l2" value="Aproximadamente"/><label for="l2"><span class="radio-circle"></span>Aproximadamente</label></div>
+          <div class="opcao"><input type="radio" name="luc" id="l3" value="Não sei ao certo"/><label for="l3"><span class="radio-circle"></span>Não sei ao certo</label></div>
         </div>
-        <div class="erro-msg" id="erroLuc">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-luc">Selecione uma opção.</div>
       </div>
       <div class="field">
-        <label>Qual desafio financeiro mais te preocupa? <span class="opcional">(opcional)</span></label>
+        <label>Qual desafio financeiro mais te preocupa? <span class="op">(opcional)</span></label>
         <textarea id="desafio" placeholder="Ex: Não consigo prever se vou ter caixa no fim do mês..."></textarea>
       </div>
       <div class="btn-row">
-        <button type="button" class="btn-voltar" onclick="voltar(2)">← Voltar</button>
-        <button type="button" class="btn-proximo" onclick="avancar(2)">Próximo →</button>
+        <button class="btn-voltar" onclick="ir(2,1)">← Voltar</button>
+        <button class="btn-prox" onclick="ir(2,3)">Próximo →</button>
       </div>
     </div>
 
     <!-- SEÇÃO 4 -->
-    <div class="form-section" id="secao3">
+    <div class="form-section" id="s3">
       <div class="section-label">Etapa 4 de 4</div>
       <div class="section-title">Para onde enviamos sua análise?</div>
       <div class="section-desc">Seu diagnóstico chegará em até 24 horas no e-mail informado.</div>
       <div class="field">
-        <label>E-mail <span class="obrigatorio">*</span></label>
-        <input type="email" id="emailProspect" placeholder="seu@email.com.br" />
-        <div class="erro-msg">Informe um e-mail válido.</div>
+        <label>E-mail <span class="ob">*</span></label>
+        <input type="email" id="email" placeholder="seu@email.com.br"/>
+        <div class="erro-msg" id="e-email">Informe um e-mail válido.</div>
       </div>
       <div class="field">
-        <label>WhatsApp <span class="opcional">(opcional)</span></label>
-        <input type="tel" id="whatsapp" placeholder="(XX) XXXXX-XXXX"/>
+        <label>WhatsApp <span class="op">(opcional)</span></label>
+        <input type="tel" id="whats" placeholder="(XX) XXXXX-XXXX"/>
       </div>
       <div class="field">
-        <label>Melhor horário para contato <span class="obrigatorio">*</span></label>
-        <div class="opcoes-grid tres">
-          <div class="opcao"><input type="radio" name="hor" id="h1" value="Manhã (8h–12h)"/><label for="h1"><span class="opcao-radio"></span>Manhã (8h–12h)</label></div>
-          <div class="opcao"><input type="radio" name="hor" id="h2" value="Tarde (12h–18h)"/><label for="h2"><span class="opcao-radio"></span>Tarde (12h–18h)</label></div>
-          <div class="opcao"><input type="radio" name="hor" id="h3" value="Qualquer horário"/><label for="h3"><span class="opcao-radio"></span>Qualquer horário</label></div>
+        <label>Melhor horário para contato <span class="ob">*</span></label>
+        <div class="grid3">
+          <div class="opcao"><input type="radio" name="hor" id="h1" value="Manhã (8h–12h)"/><label for="h1"><span class="radio-circle"></span>Manhã (8h–12h)</label></div>
+          <div class="opcao"><input type="radio" name="hor" id="h2" value="Tarde (12h–18h)"/><label for="h2"><span class="radio-circle"></span>Tarde (12h–18h)</label></div>
+          <div class="opcao"><input type="radio" name="hor" id="h3" value="Qualquer horário"/><label for="h3"><span class="radio-circle"></span>Qualquer horário</label></div>
         </div>
-        <div class="erro-msg" id="erroHor">Selecione uma opção.</div>
+        <div class="erro-msg" id="e-hor">Selecione uma opção.</div>
       </div>
       <div class="btn-row">
-        <button type="button" class="btn-voltar" onclick="voltar(3)">← Voltar</button>
-        <button type="button" class="btn-enviar" id="btnEnviar" onclick="enviar()">
+        <button class="btn-voltar" onclick="ir(3,2)">← Voltar</button>
+        <button class="btn-env" id="btnEnv" onclick="enviar()">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Enviar e receber minha análise
         </button>
       </div>
     </div>
-  </form>
+
+  </div><!-- fim formulario -->
 
   <!-- SUCESSO -->
   <div id="sucesso">
@@ -337,114 +279,105 @@
 </main>
 
 <script>
-  // ── NAVEGAÇÃO ────────────────────────────────────────
-  function atualizarProgress(idx) {
-    for (let i = 0; i < 4; i++) {
-      const d = document.getElementById('dot' + i);
-      d.className = 'step-dot' + (i < idx ? ' done' : i === idx ? ' active' : '');
-    }
+function prog(idx){
+  for(var i=0;i<4;i++){
+    var d=document.getElementById('d'+i);
+    d.className='step-dot'+(i<idx?' done':i===idx?' active':'');
   }
+}
 
-  function getRadio(name) {
-    const checked = document.querySelector(`input[name="${name}"]:checked`);
-    return checked ? checked.value : '';
+function radio(name){
+  var el=document.querySelector('input[name="'+name+'"]:checked');
+  return el?el.value:'';
+}
+
+function mostrarErro(id,mostrar){
+  var el=document.getElementById(id);
+  if(el) el.className='erro-msg'+(mostrar?' show':'');
+}
+
+function validar(idx){
+  var ok=true;
+  if(idx===0){
+    var emp=document.getElementById('empresa').value.trim();
+    mostrarErro('e-empresa',!emp); if(!emp) ok=false;
+    var nom=document.getElementById('nome').value.trim();
+    mostrarErro('e-nome',!nom); if(!nom) ok=false;
+    var set=document.getElementById('setor').value;
+    mostrarErro('e-setor',!set); if(!set) ok=false;
+    mostrarErro('e-tempo',!radio('tempo')); if(!radio('tempo')) ok=false;
   }
-
-  function validarSecao(idx) {
-    let ok = true;
-    function checarTexto(id) {
-      const el = document.getElementById(id);
-      const msg = el.closest('.field').querySelector('.erro-msg');
-      if (!el.value.trim()) { el.classList.add('erro'); msg.classList.add('visivel'); ok = false; }
-      else { el.classList.remove('erro'); msg.classList.remove('visivel'); }
-    }
-    function checarRadio(name, erroId) {
-      const msg = document.getElementById(erroId);
-      if (!getRadio(name)) { msg.classList.add('visivel'); ok = false; }
-      else msg.classList.remove('visivel');
-    }
-    function checarSelect(id) {
-      const el = document.getElementById(id);
-      const msg = el.closest('.field').querySelector('.erro-msg');
-      if (!el.value) { el.classList.add('erro'); msg.classList.add('visivel'); ok = false; }
-      else { el.classList.remove('erro'); msg.classList.remove('visivel'); }
-    }
-    if (idx === 0) { checarTexto('empresa'); checarTexto('nome'); checarSelect('setor'); checarRadio('tempo','erroTempo'); }
-    if (idx === 1) { checarRadio('fat','erroFat'); checarRadio('rec','erroRec'); checarRadio('inad','erroInad'); checarRadio('verm','erroVerm'); }
-    if (idx === 2) { checarRadio('sep','erroSep'); checarRadio('ctrl','erroCtrl'); checarRadio('luc','erroLuc'); }
-    if (idx === 3) {
-      checarRadio('hor','erroHor');
-      const ep = document.getElementById('emailProspect');
-      const epMsg = ep.closest('.field').querySelector('.erro-msg');
-      if (!ep.value.trim() || !ep.value.includes('@')) { ep.classList.add('erro'); epMsg.classList.add('visivel'); ok = false; }
-      else { ep.classList.remove('erro'); epMsg.classList.remove('visivel'); }
-    }
-    return ok;
+  if(idx===1){
+    mostrarErro('e-fat',!radio('fat')); if(!radio('fat')) ok=false;
+    mostrarErro('e-rec',!radio('rec')); if(!radio('rec')) ok=false;
+    mostrarErro('e-inad',!radio('inad')); if(!radio('inad')) ok=false;
+    mostrarErro('e-verm',!radio('verm')); if(!radio('verm')) ok=false;
   }
-
-  function avancar(idx) {
-    if (!validarSecao(idx)) return;
-    document.getElementById('secao'+idx).classList.remove('active');
-    document.getElementById('secao'+(idx+1)).classList.add('active');
-    atualizarProgress(idx+1);
-    window.scrollTo({top:0,behavior:'smooth'});
+  if(idx===2){
+    mostrarErro('e-sep',!radio('sep')); if(!radio('sep')) ok=false;
+    mostrarErro('e-ctrl',!radio('ctrl')); if(!radio('ctrl')) ok=false;
+    mostrarErro('e-luc',!radio('luc')); if(!radio('luc')) ok=false;
   }
-
-  function voltar(idx) {
-    document.getElementById('secao'+idx).classList.remove('active');
-    document.getElementById('secao'+(idx-1)).classList.add('active');
-    atualizarProgress(idx-1);
-    window.scrollTo({top:0,behavior:'smooth'});
+  if(idx===3){
+    var em=document.getElementById('email').value.trim();
+    var emOk=em&&em.indexOf('@')>0;
+    mostrarErro('e-email',!emOk); if(!emOk) ok=false;
+    mostrarErro('e-hor',!radio('hor')); if(!radio('hor')) ok=false;
   }
+  return ok;
+}
 
-    // ── ENVIO VIA WEB3FORMS ─────────────────────────────────
-  async function enviar() {
-    if (!validarSecao(3)) return;
+function ir(de,para){
+  if(para>de && !validar(de)) return;
+  document.getElementById('s'+de).classList.remove('active');
+  document.getElementById('s'+para).classList.add('active');
+  prog(para);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-    const btn = document.getElementById('btnEnviar');
-    btn.disabled = true;
-    btn.innerHTML = 'Enviando...';
+async function enviar(){
+  if(!validar(3)) return;
+  var btn=document.getElementById('btnEnv');
+  btn.disabled=true;
+  btn.textContent='Enviando...';
 
-    const formData = new FormData();
-    formData.append('access_key', '84440271-8b59-492f-83c7-61284bf83546');
-    formData.append('subject', 'Novo diagnóstico — ' + document.getElementById('empresa').value);
-    formData.append('Empresa', document.getElementById('empresa').value);
-    formData.append('Nome', document.getElementById('nome').value);
-    formData.append('Setor', document.getElementById('setor').value);
-    formData.append('Tempo de empresa', getRadio('tempo'));
-    formData.append('Faturamento', getRadio('fat'));
-    formData.append('Forma de recebimento', getRadio('rec'));
-    formData.append('Inadimplência', getRadio('inad'));
-    formData.append('Ficou no vermelho', getRadio('verm'));
-    formData.append('Separação PJ/PF', getRadio('sep'));
-    formData.append('Controle financeiro', getRadio('ctrl'));
-    formData.append('Conhece lucro real', getRadio('luc'));
-    formData.append('Desafio principal', document.getElementById('desafio').value || '—');
-    formData.append('Email do prospect', document.getElementById('emailProspect').value);
-    formData.append('WhatsApp', document.getElementById('whatsapp').value || '—');
-    formData.append('Melhor horário', getRadio('hor'));
+  var fd=new FormData();
+  fd.append('access_key','84440271-8b59-492f-83c7-61284bf83546');
+  fd.append('subject','Novo diagnóstico — '+document.getElementById('empresa').value);
+  fd.append('Empresa',document.getElementById('empresa').value);
+  fd.append('Nome',document.getElementById('nome').value);
+  fd.append('Setor',document.getElementById('setor').value);
+  fd.append('Tempo de empresa',radio('tempo'));
+  fd.append('Faturamento',radio('fat'));
+  fd.append('Recebimento',radio('rec'));
+  fd.append('Inadimplência',radio('inad'));
+  fd.append('Ficou no vermelho',radio('verm'));
+  fd.append('Separação PJ/PF',radio('sep'));
+  fd.append('Controle financeiro',radio('ctrl'));
+  fd.append('Lucro real',radio('luc'));
+  fd.append('Desafio',document.getElementById('desafio').value||'—');
+  fd.append('Email do prospect',document.getElementById('email').value);
+  fd.append('WhatsApp',document.getElementById('whats').value||'—');
+  fd.append('Horário',radio('hor'));
 
-    try {
-      const resp = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await resp.json();
-      if (data.success) {
-        document.getElementById('formulario').style.display = 'none';
-        document.getElementById('sucesso').style.display = 'block';
-        window.scrollTo({top:0,behavior:'smooth'});
-      } else {
-        btn.disabled = false;
-        btn.innerHTML = 'Enviar e receber minha análise';
-        alert('Erro ao enviar. Tente novamente.');
-      }
-    } catch(e) {
-      btn.disabled = false;
-      btn.innerHTML = 'Enviar e receber minha análise';
-      alert('Erro de conexão. Tente novamente.');
+  try{
+    var r=await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});
+    var d=await r.json();
+    if(d.success){
+      document.getElementById('formulario').style.display='none';
+      document.getElementById('sucesso').style.display='block';
+      window.scrollTo({top:0,behavior:'smooth'});
+    } else {
+      btn.disabled=false;
+      btn.textContent='Enviar e receber minha análise';
+      alert('Erro: '+JSON.stringify(d));
     }
+  } catch(e){
+    btn.disabled=false;
+    btn.textContent='Enviar e receber minha análise';
+    alert('Erro de conexão: '+e.message);
   }
+}
 </script>
 </body>
 </html>
