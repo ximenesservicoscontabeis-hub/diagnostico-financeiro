@@ -18,72 +18,6 @@
   html { scroll-behavior: smooth; }
   body { font-family: 'DM Sans', sans-serif; background: var(--creme); color: var(--texto); min-height: 100vh; }
 
-  /* SETUP BANNER */
-  #setupBanner {
-    background: #FFF8E8;
-    border-bottom: 2px solid #F0AD4E;
-    padding: 20px 32px;
-  }
-  .setup-inner {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .setup-titulo {
-    font-size: 14px;
-    font-weight: 600;
-    color: #7D4E00;
-    margin-bottom: 4px;
-  }
-  .setup-desc {
-    font-size: 13px;
-    color: #A06000;
-    margin-bottom: 14px;
-    line-height: 1.5;
-  }
-  .setup-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .setup-row input {
-    flex: 1;
-    min-width: 200px;
-    padding: 10px 14px;
-    border: 1.5px solid #F0AD4E;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--texto);
-    background: var(--branco);
-    outline: none;
-  }
-  .setup-row input:focus { border-color: #E09000; box-shadow: 0 0 0 3px rgba(240,173,78,0.2); }
-  .btn-salvar {
-    background: #E09000;
-    color: white;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
-  }
-  .btn-salvar:hover { background: #C07800; }
-  #setupOk {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: #0F6E56;
-    font-weight: 500;
-    margin-top: 8px;
-  }
-  #setupOk svg { flex-shrink: 0; }
-
   /* HEADER */
   header { background: var(--verde-escuro); padding: 0; position: relative; overflow: hidden; }
   .header-pattern {
@@ -196,18 +130,6 @@
 </head>
 <body>
 
-    <div class="setup-desc">Digite seu e-mail abaixo. Cada vez que alguém preencher o formulário, você receberá os dados nesse e-mail automaticamente.</div>
-    <div class="setup-row">
-      <input type="email" id="inputEmailConfig" placeholder="seu@email.com.br" />
-      <button class="btn-salvar" onclick="salvarEmail()">✓ Salvar e-mail</button>
-    </div>
-    <div id="setupOk">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#E1F5EE"/><path d="M8 12l3 3 5-5" stroke="#0F6E56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      E-mail salvo! O formulário já está pronto para receber respostas.
-    </div>
-  </div>
-</div>
-
 <header>
   <div class="header-pattern"></div>
   <div class="header-inner">
@@ -234,10 +156,7 @@
 </div>
 
 <main>
-  <form id="formulario" action="https://api.web3forms.com/submit" method="POST">
-    <input type="hidden" name="access_key" value="84440271-8b59-492f-83c7-61284bf83546"/>
-    <input type="hidden" name="subject" value="Novo diagnóstico financeiro recebido"/>
-    <input type="hidden" name="redirect" value="false"/>
+  <form id="formulario">
 
     <!-- SEÇÃO 1 -->
     <div class="form-section active" id="secao0">
@@ -478,49 +397,53 @@
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
-  // ── ENVIO VIA MAILTO ─────────────────────────────────
-  function enviar() {
+    // ── ENVIO VIA WEB3FORMS ─────────────────────────────────
+  async function enviar() {
     if (!validarSecao(3)) return;
 
-    const dados = {
-      'Empresa':        document.getElementById('empresa').value,
-      'Nome':           document.getElementById('nome').value,
-      'Setor':          document.getElementById('setor').value,
-      'Tempo de empresa': getRadio('tempo'),
-      'Faturamento':    getRadio('fat'),
-      'Forma de recebimento': getRadio('rec'),
-      'Inadimplência':  getRadio('inad'),
-      'Ficou no vermelho': getRadio('verm'),
-      'Separação PJ/PF': getRadio('sep'),
-      'Controle financeiro': getRadio('ctrl'),
-      'Conhece lucro real': getRadio('luc'),
-      'Desafio principal': document.getElementById('desafio').value || '—',
-      'E-mail do prospect': document.getElementById('emailProspect').value,
-      'WhatsApp':       document.getElementById('whatsapp').value || '—',
-      'Melhor horário': getRadio('hor'),
-    };
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled = true;
+    btn.innerHTML = 'Enviando...';
 
-    const corpo = Object.entries(dados)
-      .map(([k,v]) => `${k}: ${v}`)
-      .join('\n');
+    const formData = new FormData();
+    formData.append('access_key', '84440271-8b59-492f-83c7-61284bf83546');
+    formData.append('subject', 'Novo diagnóstico — ' + document.getElementById('empresa').value);
+    formData.append('Empresa', document.getElementById('empresa').value);
+    formData.append('Nome', document.getElementById('nome').value);
+    formData.append('Setor', document.getElementById('setor').value);
+    formData.append('Tempo de empresa', getRadio('tempo'));
+    formData.append('Faturamento', getRadio('fat'));
+    formData.append('Forma de recebimento', getRadio('rec'));
+    formData.append('Inadimplência', getRadio('inad'));
+    formData.append('Ficou no vermelho', getRadio('verm'));
+    formData.append('Separação PJ/PF', getRadio('sep'));
+    formData.append('Controle financeiro', getRadio('ctrl'));
+    formData.append('Conhece lucro real', getRadio('luc'));
+    formData.append('Desafio principal', document.getElementById('desafio').value || '—');
+    formData.append('Email do prospect', document.getElementById('emailProspect').value);
+    formData.append('WhatsApp', document.getElementById('whatsapp').value || '—');
+    formData.append('Melhor horário', getRadio('hor'));
 
-    const assunto = encodeURIComponent(`Novo diagnóstico — ${dados['Empresa']}`);
-    const corpoEnc = encodeURIComponent(corpo);
-    const destino = emailDestino || '';
-
-    if (!destino) {
-      alert('⚠️ Configure seu e-mail no topo da página antes de receber respostas!');
-      window.scrollTo({top:0,behavior:'smooth'});
-      return;
+    try {
+      const resp = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await resp.json();
+      if (data.success) {
+        document.getElementById('formulario').style.display = 'none';
+        document.getElementById('sucesso').style.display = 'block';
+        window.scrollTo({top:0,behavior:'smooth'});
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = 'Enviar e receber minha análise';
+        alert('Erro ao enviar. Tente novamente.');
+      }
+    } catch(e) {
+      btn.disabled = false;
+      btn.innerHTML = 'Enviar e receber minha análise';
+      alert('Erro de conexão. Tente novamente.');
     }
-
-    window.location.href = `mailto:${destino}?subject=${assunto}&body=${corpoEnc}`;
-
-    setTimeout(() => {
-      document.getElementById('formulario').style.display = 'none';
-      document.getElementById('sucesso').style.display = 'block';
-      window.scrollTo({top:0,behavior:'smooth'});
-    }, 800);
   }
 </script>
 </body>
